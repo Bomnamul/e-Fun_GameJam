@@ -112,16 +112,21 @@ public class RunController : MonoBehaviour
             UIManager.instance.SetUIHealthRemain(healthPoint);
         }
 
-        if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 정지 후 Mini 게임 전환
+        if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 impulse 생성, 파티클 생성
         {
-            onRun = false;
-            GameManager.instance.SetGameState(GameManager.state.Mini);
-        }
+            impulse.GenerateImpulse();
+        }        
 
         if(collision.transform.tag == "Jem")
         {
             score += 10;
             collision.gameObject.SetActive(false);
+        }
+
+        if (collision.transform.tag == "MinigamePoint")  // 부장과만나면 정지 후 mini 게임 전환
+        {
+            onRun = false;
+            GameManager.instance.SetGameState(GameManager.state.Mini);
         }
     }
 
