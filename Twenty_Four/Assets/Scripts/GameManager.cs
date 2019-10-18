@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
 
     public void SetGameState(state state)
     {
+        UIManager.instance.SetUICanvas(state);
+
         switch (state)
         {
             case state.Title:
