@@ -7,7 +7,7 @@ using Cinemachine;
 public class RunController : MonoBehaviour
 {
     /* 기본적인 조작 (점프, 이단 점프)
-     * speed, score, life, jumpCount
+     * speed, score, healthPoint, jumpCount
      * GetDamage(), Movement()
      */
 
@@ -19,7 +19,7 @@ public class RunController : MonoBehaviour
     BoxCollider2D col;
     int score = 0;
     [SerializeField]
-    int life = 100;
+    int healthPoint = 100;
     [SerializeField]
     int jumpCount = 2;
     [SerializeField]
@@ -61,20 +61,20 @@ public class RunController : MonoBehaviour
 
     public void GetDamage(int damage)
     {
-        if (life - damage <= 0)
+        if (healthPoint - damage <= 0)
         {
-            life = 0;
+            healthPoint = 0;
             Debug.Log("Game Over");
             GameManager.instance.SetGameState(GameManager.state.Lose);
-            // GameOver 추가 필요
+            return;
         }
 
-        life -= damage;
+        healthPoint -= damage;
     }
 
     void CheckOnGround()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.52f, layerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.55f, layerMask);
 
         if (hit)
         {
@@ -90,20 +90,19 @@ public class RunController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && jumpCount != 0)
         {
-            jumpCount--;            
+            jumpCount--;
 
             rbody.velocity = new Vector2(rbody.velocity.x, jumpPow);
 
         }
     }
 
-    
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.tag == "Obstacles") // 방해물과 trigger 발생 시 속도 느려짐, 체력 깎음
         {
             GetDamage(10);
+            UIManager.instance.SetUIHealthRemain(healthPoint);
         }
 
         if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 정지 후 Mini 게임 전환
