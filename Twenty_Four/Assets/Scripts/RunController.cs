@@ -36,6 +36,11 @@ public class RunController : MonoBehaviour
 
     void Update()
     {
+    
+    }
+
+    private void FixedUpdate()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.Ready)
         {
             onRun = true;
@@ -74,20 +79,19 @@ public class RunController : MonoBehaviour
     void Movement()
     {
         CheckOnGround();
-        rbody.MovePosition(transform.position + forward);
-
-        //if (Input.GetKeyDown(KeyCode.Space) && jumpCount != 0)
-        //{
-        //    jumpCount--;
-        //    rbody.AddForce(Vector2.up * 1000, ForceMode2D.Force);
-        //}
+        rbody.velocity = new Vector2(forward.x, rbody.velocity.y);
 
         if (Input.GetKeyDown(KeyCode.Space) && jumpCount != 0)
         {
             jumpCount--;
-            transform.DOLocalJump(new Vector3(transform.position.x + 3, 0, 0), 5f, 1, 0.5f);
+            jumpArrivePoint = transform.position;
+
+            rbody.velocity = new Vector2(rbody.velocity.x, 25f);
+
         }
     }
+
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
