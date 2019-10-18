@@ -15,7 +15,6 @@ public class RunController : MonoBehaviour
     public LayerMask layerMask;
     public float speed;
 
-    Vector3 forward;
     Animator anim;
     Rigidbody2D rbody;
     BoxCollider2D col;
@@ -27,7 +26,7 @@ public class RunController : MonoBehaviour
     int jumpCount = 2;
     [SerializeField]
     float jumpPow;
-    bool onRun = false;
+    public bool onRun = false;
     
 
     private void Awake()
@@ -41,7 +40,7 @@ public class RunController : MonoBehaviour
 
     void Start()
     {
-        forward = new Vector3(speed, 0, 0);
+        
     }
 
     void Update()
@@ -53,10 +52,8 @@ public class RunController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.Ready)
         {
-            onRun = true;
-            anim.SetBool("OnRun", true);
+            StartCoroutine(OpenKick());            
             GameManager.instance.SetGameState(GameManager.state.Run);
-            impulse.GenerateImpulse();
         }
         else if (onRun && GameManager.instance.gameStatus == GameManager.state.Run)
         {
@@ -69,6 +66,8 @@ public class RunController : MonoBehaviour
         if (healthPoint - damage <= 0)
         {
             healthPoint = 0;
+            anim.SetTrigger("OnHurt");
+            anim.SetBool("OnDeath", true);
             Debug.Log("Game Over");
             GameManager.instance.SetGameState(GameManager.state.Lose);
             return;
@@ -92,7 +91,7 @@ public class RunController : MonoBehaviour
     void Movement()
     {
         CheckOnGround();
-        rbody.velocity = new Vector2(forward.x, rbody.velocity.y);
+        rbody.velocity = new Vector2(speed, rbody.velocity.y);
 
         if (Input.GetKeyDown(KeyCode.Space) && jumpCount != 0)
         {
@@ -113,8 +112,8 @@ public class RunController : MonoBehaviour
         }
 
         if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 impulse 생성, 파티클 생성
-        {
-            impulse.GenerateImpulse();
+        {           
+            StartCoroutine(OpenKick());
         }        
 
         if(collision.transform.tag == "Jem")
@@ -125,21 +124,44 @@ public class RunController : MonoBehaviour
 
         if (collision.transform.tag == "MinigamePoint")  // 부장과만나면 정지 후 mini 게임 전환
         {
-            onRun = false;
-            GameManager.instance.SetGameState(GameManager.state.Mini);
+            StartCoroutine(MinigamePoint());
+            //onRun = false;
+            //GameManager.instance.SetGameState(GameManager.state.Mini);
         }
+    }
+
+    IEnumerator MinigamePoint()
+    {
+        speed = 10f;
+        anim.SetBool("OnWalk", true);
+        anim.SetBool("OnRun", false);
+        yield return new WaitForSeconds(1f);
+        speed = 0f;
+        anim.SetBool("OnWalk", false);
     }
 
     IEnumerator SpeedDown()
     {
-        forward.x = 0;
+        float originSpeed = speed;
+        speed = 0;
 
-        while (forward.x < speed)
+        while (speed < originSpeed)
         {
-            forward.x++;
+            speed++;
             yield return new WaitForSeconds(0.1f);
         }
 
-        forward.x = speed;
+        speed = originSpeed;
+    }
+
+    IEnumerator OpenKick()
+    {
+        onRun = false;
+        rbody.velocity = Vector2.zero;
+        impulse.GenerateImpulse();
+        anim.SetTrigger("OnKick");
+        yield return new WaitForSeconds(0.5f);
+        onRun = true;
+        anim.SetBool("OnRun", true);
     }
 }
