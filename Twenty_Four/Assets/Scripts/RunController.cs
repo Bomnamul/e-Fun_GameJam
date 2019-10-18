@@ -21,7 +21,7 @@ public class RunController : MonoBehaviour
     int life = 100;
     [SerializeField]
     int jumpCount = 2;
-    Vector3 jumpArrivePoint;
+    bool onRun = false;
 
     private void Awake()
     {
@@ -29,23 +29,27 @@ public class RunController : MonoBehaviour
         col = GetComponent<BoxCollider2D>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         forward = new Vector3(speed, 0, 0);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // input.space 로 ready to run 필요
-        //Movement();
+    
     }
 
     private void FixedUpdate()
     {
-        Movement();
-
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.Ready)
+        {
+            onRun = true;
+            GameManager.instance.SetGameState(GameManager.state.Run);
+        }
+        else if (onRun && GameManager.instance.gameStatus == GameManager.state.Run)
+        {
+            Movement();
+        }
     }
 
     public void GetDamage(int damage)
@@ -54,6 +58,7 @@ public class RunController : MonoBehaviour
         {
             life = 0;
             Debug.Log("Game Over");
+            GameManager.instance.SetGameState(GameManager.state.Lose);
             // GameOver 추가 필요
         }
 
@@ -90,9 +95,15 @@ public class RunController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Obstacles")
+        if (collision.transform.tag == "Obstacles") // 방해물과 trigger 발생 시 속도 느려짐, 체력 깎음
         {
             GetDamage(10);
+        }
+
+        if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 정지 후 Mini 게임 전환
+        {
+            onRun = false;
+            GameManager.instance.SetGameState(GameManager.state.Mini);
         }
     }
 }
