@@ -25,4 +25,9 @@ public class SceneMgr : MonoBehaviour
     {
         
     }
+
+    public void LoadScene(string sceneIndex)
+    {
+        // 애니메이션 이후 호출되어 씬 전환
+    }
 }
