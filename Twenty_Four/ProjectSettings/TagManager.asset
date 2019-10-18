@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Obstacles
   - CompanyPoint
+  - Jem
   layers:
   - Default
   - TransparentFX
