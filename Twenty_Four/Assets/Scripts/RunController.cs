@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Cinemachine;
+using System;
 
 public class RunController : MonoBehaviour
 {
@@ -15,8 +16,10 @@ public class RunController : MonoBehaviour
     public float speed;
 
     Vector3 forward;
+    Animator anim;
     Rigidbody2D rbody;
     BoxCollider2D col;
+    CinemachineImpulseSource impulse;
     int score = 0;
     [SerializeField]
     int healthPoint = 100;
@@ -25,10 +28,11 @@ public class RunController : MonoBehaviour
     [SerializeField]
     float jumpPow;
     bool onRun = false;
-    CinemachineImpulseSource impulse;
+    
 
     private void Awake()
     {
+        anim = GetComponentInChildren<Animator>();
         rbody = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
         impulse = GetComponent<CinemachineImpulseSource>();
@@ -37,7 +41,7 @@ public class RunController : MonoBehaviour
 
     void Start()
     {
-        forward = new Vector3(speed, 0, 0);        
+        forward = new Vector3(speed, 0, 0);
     }
 
     void Update()
@@ -50,6 +54,7 @@ public class RunController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.Ready)
         {
             onRun = true;
+            anim.SetBool("OnRun", true);
             GameManager.instance.SetGameState(GameManager.state.Run);
             impulse.GenerateImpulse();
         }
@@ -70,6 +75,7 @@ public class RunController : MonoBehaviour
         }
 
         healthPoint -= damage;
+        anim.SetTrigger("OnHurt");
     }
 
     void CheckOnGround()
@@ -102,6 +108,7 @@ public class RunController : MonoBehaviour
         if (collision.transform.tag == "Obstacles") // 방해물과 trigger 발생 시 속도 느려짐, 체력 깎음
         {
             GetDamage(10);
+            StartCoroutine(SpeedDown());
             UIManager.instance.SetUIHealthRemain(healthPoint);
         }
 
@@ -116,5 +123,18 @@ public class RunController : MonoBehaviour
             score += 10;
             collision.gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator SpeedDown()
+    {
+        forward.x = 0;
+
+        while (forward.x < speed)
+        {
+            forward.x++;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        forward.x = speed;
     }
 }
