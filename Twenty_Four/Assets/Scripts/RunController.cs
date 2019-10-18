@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Cinemachine;
 
 public class RunController : MonoBehaviour
 {
@@ -21,17 +22,22 @@ public class RunController : MonoBehaviour
     int life = 100;
     [SerializeField]
     int jumpCount = 2;
+    [SerializeField]
+    float jumpPow;
     bool onRun = false;
+    CinemachineImpulseSource impulse;
 
     private void Awake()
     {
         rbody = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
+        impulse = GetComponent<CinemachineImpulseSource>();
+
     }
 
     void Start()
     {
-        forward = new Vector3(speed, 0, 0);
+        forward = new Vector3(speed, 0, 0);        
     }
 
     void Update()
@@ -45,6 +51,7 @@ public class RunController : MonoBehaviour
         {
             onRun = true;
             GameManager.instance.SetGameState(GameManager.state.Run);
+            impulse.GenerateImpulse();
         }
         else if (onRun && GameManager.instance.gameStatus == GameManager.state.Run)
         {
@@ -83,10 +90,9 @@ public class RunController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && jumpCount != 0)
         {
-            jumpCount--;
-            jumpArrivePoint = transform.position;
+            jumpCount--;            
 
-            rbody.velocity = new Vector2(rbody.velocity.x, 25f);
+            rbody.velocity = new Vector2(rbody.velocity.x, jumpPow);
 
         }
     }
@@ -104,6 +110,12 @@ public class RunController : MonoBehaviour
         {
             onRun = false;
             GameManager.instance.SetGameState(GameManager.state.Mini);
+        }
+
+        if(collision.transform.tag == "Jem")
+        {
+            score += 10;
+            collision.gameObject.SetActive(false);
         }
     }
 }
