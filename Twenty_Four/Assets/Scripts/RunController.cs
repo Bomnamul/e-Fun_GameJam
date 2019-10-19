@@ -117,6 +117,7 @@ public class RunController : MonoBehaviour
         if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 impulse 생성, 파티클 생성
         {           
             StartCoroutine(OpenKick());
+            smokefx.gameObject.SetActive(false);
         }        
 
         if(collision.transform.tag == "Jem")
@@ -127,9 +128,7 @@ public class RunController : MonoBehaviour
 
         if (collision.transform.tag == "MinigamePoint")  // 부장과만나면 정지 후 mini 게임 전환
         {
-            StartCoroutine(MinigamePoint());
-            onRun = false;
-            GameManager.instance.SetGameState(GameManager.state.MiniReady);
+            StartCoroutine(MinigamePoint());                       
         }
     }
 
@@ -138,9 +137,12 @@ public class RunController : MonoBehaviour
         speed = 10f;
         anim.SetBool("OnWalk", true);
         anim.SetBool("OnRun", false);
+
         yield return new WaitForSeconds(1f);
+        onRun = false;
         speed = 0f;
         anim.SetBool("OnWalk", false);
+        GameManager.instance.SetGameState(GameManager.state.MiniReady);
     }
 
     IEnumerator SpeedDown()

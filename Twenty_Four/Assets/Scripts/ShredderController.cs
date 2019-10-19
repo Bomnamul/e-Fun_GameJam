@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Cinemachine;
 
-public class ShredderController : MonoBehaviour
+public class ShredderController : MinigameController
 {
     public ShredderMachine shredder;
 
