@@ -124,6 +124,7 @@ public class RunController : MonoBehaviour
         if(collision.transform.tag == "Jem")
         {
             score += 10;
+            GameManager.instance.GetHeal(1);
             collision.gameObject.SetActive(false);
         }
 
@@ -149,7 +150,8 @@ public class RunController : MonoBehaviour
             Camera.main.GetComponent<Pixelation>().BlockCount -= 5;
             yield return null;
         }
-        GameManager.instance.SetGameState(GameManager.state.MiniReady);
+        //GameManager.instance.SetGameState(GameManager.state.MiniReady);
+        SceneMgr.instance.LoadScene(6);
     }
 
     IEnumerator SpeedDown()
