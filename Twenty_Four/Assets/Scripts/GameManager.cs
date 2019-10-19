@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Queue<int> miniQueue;
 
     List<int> scoreList;
+    int miniIndex;
+    bool useRoulette = false;
 
     private void Awake()
     {
@@ -41,21 +43,31 @@ public class GameManager : MonoBehaviour
                 break;
             case state.Ready:
                 gameStatus = state.Ready;
+                UIManager.instance.SetUICanvas(gameStatus);
                 Debug.Log("State : Ready");
                 break;
             case state.Run:
                 gameStatus = state.Run;
+                UIManager.instance.SetUICanvas(gameStatus);
                 Debug.Log("State : Run");
                 break;
             case state.MiniReady:
                 gameStatus = state.MiniReady;
-                miniRoulette();
+                if (!useRoulette)
+                {
+                    miniRoulette();
+                    useRoulette = true;
+                }
+
+                miniIndex = miniQueue.Dequeue();
                 // UI로 랜덤 3개 보여줄 것
-                SceneMgr.instance.LoadScene(miniQueue.Dequeue(), 3);
+                SceneMgr.instance.LoadScene(miniIndex, 3);
+                UIManager.instance.SetMiniUICanvas(gameStatus, miniIndex);
                 Debug.Log("State : MiniReady");
                 break;
             case state.MiniStart:
                 gameStatus = state.MiniStart;
+                UIManager.instance.SetMiniUICanvas(gameStatus, miniIndex);
                 Debug.Log("State : MiniStart");
                 break;
             case state.Result:
@@ -90,7 +102,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            int rnd = Random.Range(2, 4);
+            int rnd = Random.Range(2, 5);
             miniQueue.Enqueue(rnd);
         }
     }

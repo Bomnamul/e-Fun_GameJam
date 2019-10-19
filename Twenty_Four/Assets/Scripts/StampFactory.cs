@@ -14,7 +14,6 @@ public class StampFactory : MonoBehaviour
     public List<GameObject> unstampedList;
 
     Vector3 spawnPoint;
-    int paperSpriteOrder = 0;
 
     private void Awake()
     {

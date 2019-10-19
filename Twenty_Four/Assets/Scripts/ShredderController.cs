@@ -20,44 +20,52 @@ public class ShredderController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && currentPaper.Count == 0)
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
         {
-            currentPaper.Add(shredder.papers.Dequeue());
-            currentPaper[0].transform.DOMove(transform.position, 0.2f);
-        }
-        else if (Input.GetKeyDown(KeyCode.Space) && currentPaper.Count != 0)
-        {
-            Debug.Log("Freezing");
-            score -= 10;
-            // Freezing
+            GameManager.instance.SetGameState(GameManager.state.MiniStart);
         }
 
-        if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) && currentPaper.Count != 0)
+        if (GameManager.instance.gameStatus == GameManager.state.MiniStart)
         {
-            currentPaper[0].count--;
-            impulse.GenerateImpulse();
-        }
-        else if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) && currentPaper.Count == 0)
-        {
-            Debug.Log("Freezing");
-            score -= 10;
-        }
+            if (Input.GetKeyDown(KeyCode.Space) && currentPaper.Count == 0)
+            {
+                currentPaper.Add(shredder.papers.Dequeue());
+                currentPaper[0].transform.DOMove(transform.position, 0.2f);
+            }
+            else if (Input.GetKeyDown(KeyCode.Space) && currentPaper.Count != 0)
+            {
+                Debug.Log("Freezing");
+                score -= 10;
+                // Freezing
+            }
 
-        if (currentPaper.Count != 0 && currentPaper[0].count == 0)
-        {
-            currentPaper[0].gameObject.SetActive(false);
-            shredder.tempList.Add(currentPaper[0]);
-            currentPaper.Clear();
-        }
+            if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) && currentPaper.Count != 0)
+            {
+                currentPaper[0].count--;
+                impulse.GenerateImpulse();
+            }
+            else if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) && currentPaper.Count == 0)
+            {
+                Debug.Log("Freezing");
+                score -= 10;
+            }
 
-        if (shredder.papers.Count == 0 && currentPaper.Count == 0)
-        {
-            Debug.Log("Shredding End");
-            GameManager.instance.AddScore(score);
-            if (GameManager.instance.miniQueue.Count != 0)
-                SceneMgr.instance.LoadScene(GameManager.instance.miniQueue.Dequeue());
-            else
-                GameManager.instance.SetGameState(GameManager.state.Result);
+            if (currentPaper.Count != 0 && currentPaper[0].count == 0)
+            {
+                currentPaper[0].gameObject.SetActive(false);
+                shredder.tempList.Add(currentPaper[0]);
+                currentPaper.Clear();
+            }
+
+            if (shredder.papers.Count == 0 && currentPaper.Count == 0)
+            {
+                Debug.Log("Shredding End");
+                GameManager.instance.AddScore(score);
+                if (GameManager.instance.miniQueue.Count != 0)
+                    GameManager.instance.SetGameState(GameManager.state.MiniReady);
+                else
+                    GameManager.instance.SetGameState(GameManager.state.Result);
+            }
         }
     }
 }

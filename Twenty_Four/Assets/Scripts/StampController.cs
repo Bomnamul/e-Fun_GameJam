@@ -22,55 +22,63 @@ public class StampController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && deskPos.childCount > 0)
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
         {
-            anim.SetTrigger("OnStamp");
-            stampCount++;            
-        }
-        if(Input.GetKeyDown(KeyCode.LeftArrow) && deskPos.childCount > 0)
-        {
-            hand.factory.RemoveUnstampedLast();
-            tempPaper = deskPos.GetChild(0);
-            tempPaper.parent = null;
-            tempPaper.DOMoveX(-5f, 0.5f).OnComplete(() => tempPaper.gameObject.SetActive(false));
-
-            if(tempPaper.transform.name == "1StampPaper(Clone)" && stampCount == 1)
-            {
-                score += 100;
-                hand.factory.stampedList.Add(tempPaper.gameObject);
-                stampCount = 0;
-            }
-            else
-            {
-                score -= 50;
-                StartCoroutine(Miss());
-                hand.factory.missStampedList.Add(tempPaper.gameObject);
-                stampCount = 0;
-            }
-            StartCoroutine(SetNewPaper());
+            GameManager.instance.SetGameState(GameManager.state.MiniStart);
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && deskPos.childCount > 0)
+        if (GameManager.instance.gameStatus == GameManager.state.MiniStart)
         {
-            hand.factory.RemoveUnstampedLast();
-            tempPaper = deskPos.GetChild(0);
-            tempPaper.parent = null;
-            tempPaper.DOMoveX(5f, 0.5f).OnComplete(() => tempPaper.gameObject.SetActive(false));
-            
-            if (tempPaper.transform.name == "2StampPaper(Clone)" && stampCount == 2)
+            if (Input.GetKeyDown(KeyCode.Space) && deskPos.childCount > 0)
             {
-                score += 100;
-                hand.factory.stampedList.Add(tempPaper.gameObject);
-                stampCount = 0;
+                anim.SetTrigger("OnStamp");
+                stampCount++;
             }
-            else
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && deskPos.childCount > 0)
             {
-                score -= 50;
-                StartCoroutine(Miss());
-                hand.factory.missStampedList.Add(tempPaper.gameObject);
-                stampCount = 0;
+                hand.factory.RemoveUnstampedLast();
+                tempPaper = deskPos.GetChild(0);
+                tempPaper.parent = null;
+                tempPaper.DOMoveX(-5f, 0.5f).OnComplete(() => tempPaper.gameObject.SetActive(false));
+
+                if (tempPaper.transform.name == "1StampPaper(Clone)" && stampCount == 1)
+                {
+                    score += 100;
+                    hand.factory.stampedList.Add(tempPaper.gameObject);
+                    stampCount = 0;
+                }
+                else
+                {
+                    score -= 50;
+                    StartCoroutine(Miss());
+                    hand.factory.missStampedList.Add(tempPaper.gameObject);
+                    stampCount = 0;
+                }
+                StartCoroutine(SetNewPaper());
             }
-            StartCoroutine(SetNewPaper());
+
+            if (Input.GetKeyDown(KeyCode.RightArrow) && deskPos.childCount > 0)
+            {
+                hand.factory.RemoveUnstampedLast();
+                tempPaper = deskPos.GetChild(0);
+                tempPaper.parent = null;
+                tempPaper.DOMoveX(5f, 0.5f).OnComplete(() => tempPaper.gameObject.SetActive(false));
+
+                if (tempPaper.transform.name == "2StampPaper(Clone)" && stampCount == 2)
+                {
+                    score += 100;
+                    hand.factory.stampedList.Add(tempPaper.gameObject);
+                    stampCount = 0;
+                }
+                else
+                {
+                    score -= 50;
+                    StartCoroutine(Miss());
+                    hand.factory.missStampedList.Add(tempPaper.gameObject);
+                    stampCount = 0;
+                }
+                StartCoroutine(SetNewPaper());
+            }
         }
     }
 
