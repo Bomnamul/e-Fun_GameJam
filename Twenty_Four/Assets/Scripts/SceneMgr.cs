@@ -70,7 +70,6 @@ public class SceneMgr : MonoBehaviour
         {
             UIManager.instance.canvasList[0].SetActive(false);
         }
-        ao.allowSceneActivation = true;
 
         isLoadComplete = true;
 
