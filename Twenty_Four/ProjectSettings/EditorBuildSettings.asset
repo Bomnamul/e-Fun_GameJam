@@ -12,9 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/In_Game.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/Mini_Shredding.unity
+    guid: 319cf50b113a427409403908e18773ca
+  - enabled: 1
     path: Assets/Scenes/Mini_Sorting.unity
     guid: e4ce40a84f545484b892a9490c26f936
   - enabled: 1
-    path: Assets/Scenes/Mini_Shredding.unity
-    guid: 319cf50b113a427409403908e18773ca
+    path: Assets/Scenes/Mini_Stamp.unity
+    guid: 3e3d09868913a684594747efc3a9c9a4
   m_configObjects: {}

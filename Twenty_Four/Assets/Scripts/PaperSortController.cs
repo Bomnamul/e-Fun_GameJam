@@ -18,78 +18,86 @@ public class PaperSortController : MonoBehaviour
 
     void Update()
     {
-        remaintime -= Time.deltaTime;
-        print((int)remaintime);
-
-        if(factory.unsortedList.Count == 0 || remaintime <= 0)
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
         {
-            gameover = true;
-            GameManager.instance.AddScore(score);
+            GameManager.instance.SetGameState(GameManager.state.MiniStart);
         }
 
-        if(Input.GetKeyDown(KeyCode.LeftArrow) && !penalty && !gameover)
+        if (GameManager.instance.gameStatus == GameManager.state.MiniStart)
         {
-            var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
-            
-            if (tempPaper.transform.name == "rPaper(Clone)")
-            {
-                tempPaper.transform.DOMove(redPoint.position, 0.5f).OnComplete(() => tempPaper.SetActive(false));
-                score += 100;
-                factory.redPoolList.Add(tempPaper);
-                factory.unsortedList.Remove(tempPaper);
-                factory.transform.position -= new Vector3(0f, factory.paperDistance, 0f);
-            }
-            else
-            {
-                tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
-                StartCoroutine(OnPenalty());
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow) && !penalty && !gameover)
-        {
-            var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
+            remaintime -= Time.deltaTime;
+            print((int)remaintime);
 
-            if (tempPaper.transform.name == "gPaper(Clone)")
+            if (factory.unsortedList.Count == 0 || remaintime <= 0)
             {
-                tempPaper.transform.DOMove(greenPoint.position, 0.5f).OnComplete(() => tempPaper.SetActive(false));
-                score += 100;
-                factory.redPoolList.Add(tempPaper);
-                factory.unsortedList.Remove(tempPaper);
-                factory.transform.position -= new Vector3(0f, factory.paperDistance, 0f);
+                gameover = true;
+                GameManager.instance.AddScore(score);
             }
-            else
-            {
-                tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
-                StartCoroutine(OnPenalty());
-            }
-        }
-        
-        if (Input.GetKeyDown(KeyCode.RightArrow) && !penalty && !gameover)
-        {
-            var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
 
-            if (tempPaper.transform.name == "bPaper(Clone)")
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && !penalty && !gameover)
             {
-                tempPaper.transform.DOMove(bluePoint.position, 0.5f).OnComplete(() => tempPaper.SetActive(false));
-                score += 100;
-                factory.redPoolList.Add(tempPaper);
-                factory.unsortedList.Remove(tempPaper);
-                factory.transform.position -= new Vector3(0f, factory.paperDistance, 0f);
+                var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
+
+                if (tempPaper.transform.name == "rPaper(Clone)")
+                {
+                    tempPaper.transform.DOMove(redPoint.position, 0.5f).OnComplete(() => tempPaper.SetActive(false));
+                    score += 100;
+                    factory.redPoolList.Add(tempPaper);
+                    factory.unsortedList.Remove(tempPaper);
+                    factory.transform.position -= new Vector3(0f, factory.paperDistance, 0f);
+                }
+                else
+                {
+                    tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
+                    StartCoroutine(OnPenalty());
+                }
             }
-            else
+            if (Input.GetKeyDown(KeyCode.DownArrow) && !penalty && !gameover)
             {
-                tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
-                StartCoroutine(OnPenalty());
+                var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
+
+                if (tempPaper.transform.name == "gPaper(Clone)")
+                {
+                    tempPaper.transform.DOMove(greenPoint.position, 0.5f).OnComplete(() => tempPaper.SetActive(false));
+                    score += 100;
+                    factory.redPoolList.Add(tempPaper);
+                    factory.unsortedList.Remove(tempPaper);
+                    factory.transform.position -= new Vector3(0f, factory.paperDistance, 0f);
+                }
+                else
+                {
+                    tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
+                    StartCoroutine(OnPenalty());
+                }
             }
-        }
-        
-        if (factory.unsortedList.Count == 0)
-        {
-            GameManager.instance.AddScore(score);
-            if (GameManager.instance.miniQueue.Count != 0)
-                SceneMgr.instance.LoadScene(GameManager.instance.miniQueue.Dequeue());
-            else
-                GameManager.instance.SetGameState(GameManager.state.Result);
+
+            if (Input.GetKeyDown(KeyCode.RightArrow) && !penalty && !gameover)
+            {
+                var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
+
+                if (tempPaper.transform.name == "bPaper(Clone)")
+                {
+                    tempPaper.transform.DOMove(bluePoint.position, 0.5f).OnComplete(() => tempPaper.SetActive(false));
+                    score += 100;
+                    factory.redPoolList.Add(tempPaper);
+                    factory.unsortedList.Remove(tempPaper);
+                    factory.transform.position -= new Vector3(0f, factory.paperDistance, 0f);
+                }
+                else
+                {
+                    tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
+                    StartCoroutine(OnPenalty());
+                }
+            }
+
+            if (factory.unsortedList.Count == 0)
+            {
+                GameManager.instance.AddScore(score);
+                if (GameManager.instance.miniQueue.Count != 0)
+                    GameManager.instance.SetGameState(GameManager.state.MiniReady);
+                else
+                    GameManager.instance.SetGameState(GameManager.state.Result);
+            }
         }
     }
 
