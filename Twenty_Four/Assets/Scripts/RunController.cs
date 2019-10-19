@@ -119,6 +119,7 @@ public class RunController : MonoBehaviour
         if (collision.transform.tag == "Door")
         {
             StartCoroutine(OpenKick());
+            AudioManager.instance.PlayPunchSFX();
         }
 
         if(collision.transform.tag == "Jem")

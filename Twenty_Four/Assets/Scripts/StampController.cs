@@ -8,6 +8,7 @@ public class StampController : MinigameController
 {
     public Transform deskPos;
     public Stamp_HandController hand;
+    public ParticleSystem stampFX;
 
     float remaintime = 50f;
     int stampCount;
@@ -47,6 +48,8 @@ public class StampController : MinigameController
 
             if (Input.GetKeyDown(KeyCode.Space) && deskPos.childCount > 0 && !gameover)
             {
+                AudioManager.instance.PlayPunchSFX();
+                stampFX.Play();
                 anim.SetTrigger("OnStamp");
                 stampCount++;
             }
