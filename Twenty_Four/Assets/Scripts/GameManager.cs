@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        SetGameState(state.Ready);
+        //SetGameState(state.Title);
     }
 
     public void SetGameState(state state)
@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log("State : Title");
                 break;
             case state.Ready:
-                gameStatus = state.Ready;
-                UIManager.instance.SetUICanvas(gameStatus);
+                gameStatus = state.Ready;                
+                //UIManager.instance.SetUICanvas(gameStatus);
                 Debug.Log("State : Ready");
                 break;
             case state.Run:
