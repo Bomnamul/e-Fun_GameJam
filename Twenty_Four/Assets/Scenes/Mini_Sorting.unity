@@ -444,7 +444,7 @@ MonoBehaviour:
   bluePaper: {fileID: 3939264532043885942, guid: 6479247edab45014abad813e8217d412,
     type: 3}
   paperCount: 100
-  paperDistance: 0
+  paperDistance: 0.5
   redPoolList: []
   greenPoolList: []
   bluePoolList: []
