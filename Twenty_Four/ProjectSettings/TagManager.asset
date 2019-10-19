@@ -8,6 +8,7 @@ TagManager:
   - CompanyPoint
   - Jem
   - MinigamePoint
+  - Door
   layers:
   - Default
   - TransparentFX
