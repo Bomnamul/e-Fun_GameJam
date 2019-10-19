@@ -14,6 +14,7 @@ public class RunController : MonoBehaviour
 
     public LayerMask layerMask;
     public float speed;
+    public ParticleSystem smokefx;
 
     Animator anim;
     Rigidbody2D rbody;
@@ -26,6 +27,7 @@ public class RunController : MonoBehaviour
     int jumpCount = 2;
     [SerializeField]
     float jumpPow;
+    int i;
     public bool onRun = false;
     
 
@@ -49,11 +51,14 @@ public class RunController : MonoBehaviour
         {
             StartCoroutine(OpenKick());            
             GameManager.instance.SetGameState(GameManager.state.Run);
+            smokefx.Play();
         }
         else if (onRun && GameManager.instance.gameStatus == GameManager.state.Run)
         {
             Movement();
+
         }
+
     }
 
     public void GetDamage(int damage)
@@ -79,6 +84,8 @@ public class RunController : MonoBehaviour
         if (hit)
         {
             jumpCount = 2;
+            if (smokefx.isStopped)
+                smokefx.Play();
         }
 
     }
@@ -92,7 +99,8 @@ public class RunController : MonoBehaviour
         {
             jumpCount--;
 
-            rbody.velocity = new Vector2(rbody.velocity.x, jumpPow);
+            rbody.velocity = new Vector2(rbody.velocity.x,  jumpPow);
+            smokefx.Stop();
 
         }
     }
@@ -137,6 +145,7 @@ public class RunController : MonoBehaviour
 
     IEnumerator SpeedDown()
     {
+        smokefx.Stop();
         float originSpeed = speed;
         speed = 0;
 
@@ -147,6 +156,7 @@ public class RunController : MonoBehaviour
         }
 
         speed = originSpeed;
+        smokefx.Play();
     }
 
     IEnumerator OpenKick()
@@ -158,5 +168,8 @@ public class RunController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         onRun = true;
         anim.SetBool("OnRun", true);
+        
+
     }
+
 }
