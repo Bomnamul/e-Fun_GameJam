@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 
-public class PaperSortController : MonoBehaviour
+public class PaperSortController : MinigameController
 {
     public PaperFactory factory;
     public Transform redPoint;
@@ -16,6 +16,11 @@ public class PaperSortController : MonoBehaviour
     bool penalty = false;
     bool gameover = false;
 
+    private void Start()
+    {
+
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
@@ -26,12 +31,16 @@ public class PaperSortController : MonoBehaviour
         if (GameManager.instance.gameStatus == GameManager.state.MiniStart)
         {
             remaintime -= Time.deltaTime;
-            print((int)remaintime);
+            UIManager.instance.timerTxt.text = "Time : " + ((int)remaintime).ToString();
 
             if (factory.unsortedList.Count == 0 || remaintime <= 0)
             {
                 gameover = true;
                 GameManager.instance.AddScore(score);
+                if (GameManager.instance.miniQueue.Count != 0)
+                    GameManager.instance.SetGameState(GameManager.state.MiniReady);
+                else
+                    GameManager.instance.SetGameState(GameManager.state.Result);
             }
 
             if (Input.GetKeyDown(KeyCode.LeftArrow) && !penalty && !gameover)
@@ -88,15 +97,6 @@ public class PaperSortController : MonoBehaviour
                     tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                     StartCoroutine(OnPenalty());
                 }
-            }
-
-            if (factory.unsortedList.Count == 0)
-            {
-                GameManager.instance.AddScore(score);
-                if (GameManager.instance.miniQueue.Count != 0)
-                    GameManager.instance.SetGameState(GameManager.state.MiniReady);
-                else
-                    GameManager.instance.SetGameState(GameManager.state.Result);
             }
         }
     }

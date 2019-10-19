@@ -4,15 +4,17 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 
-public class StampController : MonoBehaviour
+public class StampController : MinigameController
 {
     public Transform deskPos;
     public Stamp_HandController hand;
 
+    float remaintime = 50f;
     int stampCount;
     int score;
     Animator anim;
     Transform tempPaper;
+    bool gameover = false;
 
     void Start()
     {
@@ -25,16 +27,30 @@ public class StampController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
         {
             GameManager.instance.SetGameState(GameManager.state.MiniStart);
+            hand.GameStart();
         }
 
         if (GameManager.instance.gameStatus == GameManager.state.MiniStart)
         {
-            if (Input.GetKeyDown(KeyCode.Space) && deskPos.childCount > 0)
+            remaintime -= Time.deltaTime;
+            UIManager.instance.timerTxt.text = "Time : " + ((int)remaintime).ToString();
+
+            if (hand.factory.unstampedList.Count == 0 || remaintime <= 0)
+            {
+                gameover = true;
+                GameManager.instance.AddScore(score);
+                if (GameManager.instance.miniQueue.Count != 0)
+                    GameManager.instance.SetGameState(GameManager.state.MiniReady);
+                else
+                    GameManager.instance.SetGameState(GameManager.state.Result);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && deskPos.childCount > 0 && !gameover)
             {
                 anim.SetTrigger("OnStamp");
                 stampCount++;
             }
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && deskPos.childCount > 0)
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && deskPos.childCount > 0 && !gameover)
             {
                 hand.factory.RemoveUnstampedLast();
                 tempPaper = deskPos.GetChild(0);
@@ -57,7 +73,7 @@ public class StampController : MonoBehaviour
                 StartCoroutine(SetNewPaper());
             }
 
-            if (Input.GetKeyDown(KeyCode.RightArrow) && deskPos.childCount > 0)
+            if (Input.GetKeyDown(KeyCode.RightArrow) && deskPos.childCount > 0 && !gameover)
             {
                 hand.factory.RemoveUnstampedLast();
                 tempPaper = deskPos.GetChild(0);

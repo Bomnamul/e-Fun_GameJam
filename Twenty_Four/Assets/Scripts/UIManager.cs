@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
 
     public List<GameObject> canvasList;
     public Image healthRemain;
+    public Text timerTxt;
 
     private void Awake()
     {

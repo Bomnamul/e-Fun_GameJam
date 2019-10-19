@@ -16,6 +16,10 @@ public class Stamp_HandController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         factory = GetComponentInParent<StampFactory>();
+    }
+
+    public void GameStart()
+    {
         anim.SetTrigger("Setpaper");
     }
 
