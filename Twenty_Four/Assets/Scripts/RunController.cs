@@ -24,8 +24,6 @@ public class RunController : MonoBehaviour
     CinemachineImpulseSource impulse;
     int score = 0;
     [SerializeField]
-    int healthPoint = 100;
-    [SerializeField]
     int jumpCount = 2;
     [SerializeField]
     float jumpPow;
@@ -64,19 +62,15 @@ public class RunController : MonoBehaviour
 
     }
 
-    public void GetDamage(int damage)
+    private void GetDamage(int damage)
     {
-        if (healthPoint - damage <= 0)
+        if (GameManager.instance.playerHP - damage <= 0)
         {
-            healthPoint = 0;
             anim.SetTrigger("OnHurt");
             anim.SetBool("OnDeath", true);
-            Debug.Log("Game Over");
-            GameManager.instance.SetGameState(GameManager.state.Lose);
             return;
         }
 
-        healthPoint -= damage;
         anim.SetTrigger("OnHurt");
     }
 
@@ -113,8 +107,8 @@ public class RunController : MonoBehaviour
         if (collision.transform.tag == "Obstacles") // 방해물과 trigger 발생 시 속도 느려짐, 체력 깎음
         {
             GetDamage(10);
+            GameManager.instance.GetDamage(10);
             StartCoroutine(SpeedDown());
-            UIManager.instance.SetUIHealthRemain(healthPoint);
         }
 
         if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 impulse 생성, 파티클 생성

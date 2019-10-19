@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public state gameStatus;
     public Queue<int> miniQueue;
     public int miniIndex;
+    public int playerHP = 100;
 
     List<int> scoreList;    
     bool useRoulette = false;
@@ -94,6 +95,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GetDamage(int damage)
+    {
+        if (playerHP - damage <= 0)
+        {
+            playerHP = 0;
+            UIManager.instance.SetUIHealthRemain(playerHP);
+            Debug.Log("Game Over");
+            SetGameState(state.Lose);
+            return;
+        }
+
+        playerHP -= damage;
+        UIManager.instance.SetUIHealthRemain(playerHP);
+    }
+
     public void AddScore(int score)
     {
         scoreList.Add(score);
@@ -102,6 +118,17 @@ public class GameManager : MonoBehaviour
     public void ClearScore()
     {
         scoreList.Clear();
+    }
+    
+    public int TotalScore()
+    {
+        int total = 0;
+        foreach (var score in scoreList)
+        {
+            total += score;
+        }
+
+        return total;
     }
 
     void miniRoulette()

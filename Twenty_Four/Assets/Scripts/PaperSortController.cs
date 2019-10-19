@@ -60,6 +60,7 @@ public class PaperSortController : MinigameController
                 }
                 else    // 오답
                 {
+                    GameManager.instance.GetDamage(10);
                     anim.SetTrigger("OnHurt");
                     tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                     StartCoroutine(OnPenalty());
@@ -79,6 +80,7 @@ public class PaperSortController : MinigameController
                 }
                 else
                 {
+                    GameManager.instance.GetDamage(10);
                     anim.SetTrigger("OnHurt");
                     tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                     StartCoroutine(OnPenalty());
@@ -99,6 +101,8 @@ public class PaperSortController : MinigameController
                 }
                 else
                 {
+                    GameManager.instance.GetDamage(10);
+                    anim.SetTrigger("OnHurt");
                     tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                     StartCoroutine(OnPenalty());
                 }
