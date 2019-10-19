@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public Image healthRemain;
     public Text timerTxt;
     public bool titleOn;
+    public Text scoreTxt;
 
     private void Awake()
     {

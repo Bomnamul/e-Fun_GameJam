@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class TitleManager : MonoBehaviour
 {
+    public Canvas title;
+    
+    Animator titleAnim;
+
     private void Start()
     {
         UIManager.instance.titleOn = true;
+        title.gameObject.SetActive(true);
+        titleAnim = title.GetComponent<Animator>();
     }
     void Update()
     {
@@ -14,7 +20,8 @@ public class TitleManager : MonoBehaviour
         {
 
             GameManager.instance.SetGameState(GameManager.state.Ready);
-            SceneMgr.instance.LoadScene(1);
+            titleAnim.SetTrigger("GameStart");
+            SceneMgr.instance.LoadScene(1, 1);
         }
     }
 }
