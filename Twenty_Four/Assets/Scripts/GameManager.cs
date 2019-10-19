@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
                 break;
             case state.Result:
                 gameStatus = state.Result;
-                SceneMgr.instance.LoadScene("Result");
+                SceneMgr.instance.LoadScene(5);
                 Debug.Log("State : Result");
                 break;
             case state.Win:
@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
             playerHP = 0;
             UIManager.instance.SetUIHealthRemain(playerHP);
             Debug.Log("Game Over");
-            SetGameState(state.Lose);
+            SetGameState(state.Result);
             return;
         }
 
