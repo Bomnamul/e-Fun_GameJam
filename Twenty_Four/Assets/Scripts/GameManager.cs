@@ -52,9 +52,10 @@ public class GameManager : MonoBehaviour
                 Debug.Log("State : Run");
                 break;
             case state.MiniReady:
-                print("SetstateMiniReady");
+                print("SetstateMiniReady");                
                 if (!SceneMgr.instance.isLoadComplete)
                     break;
+                SceneMgr.instance.isLoadComplete = false;
                 print("SetstateMiniReady2");
                 gameStatus = state.MiniReady;
                 if (!useRoulette)
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 miniIndex = miniQueue.Dequeue();
+                print("Dequeue");
                 // UI로 랜덤 3개 보여줄 것
                 SceneMgr.instance.LoadScene(miniIndex, 2);
                 //UIManager.instance.SetMiniUICanvas(gameStatus, miniIndex);
@@ -107,7 +109,13 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             int rnd = Random.Range(2, 5);
+            if(miniQueue.Contains(rnd))
+            {
+                i--;
+                continue;
+            }
             miniQueue.Enqueue(rnd);
         }
+        print(miniQueue.Count);
     }
 }
