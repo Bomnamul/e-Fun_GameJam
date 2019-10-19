@@ -118,7 +118,12 @@ public class RunController : MonoBehaviour
         {           
             StartCoroutine(OpenKick());
             smokefx.gameObject.SetActive(false);
-        }        
+        }
+
+        if (collision.transform.tag == "Door")
+        {
+            StartCoroutine(OpenKick());
+        }
 
         if(collision.transform.tag == "Jem")
         {
