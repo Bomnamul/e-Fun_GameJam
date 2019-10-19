@@ -73,8 +73,11 @@ public class SceneMgr : MonoBehaviour
         ao.allowSceneActivation = true;
 
         isLoadComplete = true;
-        UIManager.instance.SetMiniUICanvas(GameManager.instance.gameStatus, GameManager.instance.miniIndex);
-        UIManager.instance.SetUICanvas(GameManager.instance.gameStatus);
+
+        if (GameManager.instance.gameStatus == GameManager.state.MiniReady)
+            UIManager.instance.SetMiniUICanvas(GameManager.instance.gameStatus, GameManager.instance.miniIndex);
+        else
+            UIManager.instance.SetUICanvas(GameManager.instance.gameStatus);
     }
 
     IEnumerator AsyncLoadScene(int sceneIndex, int delay)
@@ -94,6 +97,10 @@ public class SceneMgr : MonoBehaviour
         ao.allowSceneActivation = true;
 
         isLoadComplete = true;
-        UIManager.instance.SetMiniUICanvas(GameManager.instance.gameStatus, GameManager.instance.miniIndex);
+
+        if (GameManager.instance.gameStatus == GameManager.state.MiniReady)
+            UIManager.instance.SetMiniUICanvas(GameManager.instance.gameStatus, GameManager.instance.miniIndex);
+        else
+            UIManager.instance.SetUICanvas(GameManager.instance.gameStatus);
     }
 }

@@ -36,7 +36,7 @@ public class StampController : MinigameController
         {
             remaintime -= Time.deltaTime;
             UIManager.instance.timerTxt.text = "Time : " + ((int)remaintime).ToString();
-            UIManager.instance.canvasList[4].GetComponent<GameCanvas>().gamePanel.transform.GetChild(1).GetComponent<Text>().text = hand.factory.unstampedList.Count.ToString();
+            UIManager.instance.canvasList[4].GetComponent<GameCanvas>().gamePanel.transform.GetChild(1).GetComponentInChildren<Text>().text = hand.factory.unstampedList.Count.ToString();
 
             if (hand.factory.unstampedList.Count == 0 || remaintime <= 0)
             {
