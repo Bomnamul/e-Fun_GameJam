@@ -15,6 +15,7 @@ public class RunController : MonoBehaviour
     public LayerMask layerMask;
     public float speed;
     public ParticleSystem smokefx;
+    public bool onRun = false;
 
     Animator anim;
     Rigidbody2D rbody;
@@ -28,7 +29,7 @@ public class RunController : MonoBehaviour
     [SerializeField]
     float jumpPow;
     int i;
-    public bool onRun = false;
+    bool canJump = true;
     
 
     private void Awake()
@@ -45,12 +46,13 @@ public class RunController : MonoBehaviour
         
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.Ready)
         {
-            StartCoroutine(OpenKick());            
             GameManager.instance.SetGameState(GameManager.state.Run);
+            onRun = true;
+            anim.SetBool("OnRun", true);
             smokefx.Play();
         }
         else if (onRun && GameManager.instance.gameStatus == GameManager.state.Run)
@@ -95,7 +97,7 @@ public class RunController : MonoBehaviour
         CheckOnGround();
         rbody.velocity = new Vector2(speed, rbody.velocity.y);
 
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCount != 0)
+        if (Input.GetKeyDown(KeyCode.Space) && jumpCount != 0 && canJump)
         {
             jumpCount--;
 
@@ -139,6 +141,7 @@ public class RunController : MonoBehaviour
 
     IEnumerator MinigamePoint()
     {
+        canJump = false;
         speed = 10f;
         anim.SetBool("OnWalk", true);
         anim.SetBool("OnRun", false);

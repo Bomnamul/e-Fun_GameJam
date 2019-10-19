@@ -16,7 +16,7 @@ public class PaperFactory : MonoBehaviour
     public List<GameObject> unsortedList;
 
     Vector3 spawnPoint;
-    int paperSpriteOrder = 0;
+    int paperSpriteOrder = 1;
 
     void Awake()
     {

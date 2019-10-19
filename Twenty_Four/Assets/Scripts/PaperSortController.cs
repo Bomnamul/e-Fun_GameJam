@@ -11,19 +11,20 @@ public class PaperSortController : MinigameController
     public Transform greenPoint;
     public Transform bluePoint;
 
-    float remaintime = 30;
+    float remaintime = 60;
     int score = 0;
     bool penalty = false;
     bool gameover = false;
+    Animator anim;
 
     private void Start()
     {
-
+        anim = GetComponent<Animator>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady && SceneMgr.instance.isLoadComplete)
         {
             GameManager.instance.SetGameState(GameManager.state.MiniStart);
         }
@@ -33,12 +34,14 @@ public class PaperSortController : MinigameController
             remaintime -= Time.deltaTime;
             UIManager.instance.timerTxt.text = "Time : " + ((int)remaintime).ToString();
 
-            if (factory.unsortedList.Count == 0 || remaintime <= 0)
+            if (factory.unsortedList.Count == 0 || remaintime <= 0) //gameover
             {
                 gameover = true;
                 GameManager.instance.AddScore(score);
-                if (GameManager.instance.miniQueue.Count != 0)
+                if (GameManager.instance.miniQueue.Count != 0 && GameManager.instance.gameStatus != GameManager.state.MiniReady)
+                {
                     GameManager.instance.SetGameState(GameManager.state.MiniReady);
+                }
                 else
                     GameManager.instance.SetGameState(GameManager.state.Result);
             }
@@ -47,7 +50,7 @@ public class PaperSortController : MinigameController
             {
                 var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
 
-                if (tempPaper.transform.name == "rPaper(Clone)")
+                if (tempPaper.transform.name == "rPaper(Clone)")    // 정답
                 {
                     tempPaper.transform.DOMove(redPoint.position, 0.5f).OnComplete(() => tempPaper.SetActive(false));
                     score += 100;
@@ -55,8 +58,9 @@ public class PaperSortController : MinigameController
                     factory.unsortedList.Remove(tempPaper);
                     factory.transform.position -= new Vector3(0f, factory.paperDistance, 0f);
                 }
-                else
+                else    // 오답
                 {
+                    anim.SetTrigger("OnHurt");
                     tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                     StartCoroutine(OnPenalty());
                 }
@@ -75,6 +79,7 @@ public class PaperSortController : MinigameController
                 }
                 else
                 {
+                    anim.SetTrigger("OnHurt");
                     tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                     StartCoroutine(OnPenalty());
                 }
@@ -104,7 +109,7 @@ public class PaperSortController : MinigameController
     IEnumerator OnPenalty()
     {
         penalty = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         penalty = false;
     }
 }

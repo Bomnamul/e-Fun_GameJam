@@ -23,7 +23,7 @@ public class ShredderController : MinigameController
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady && SceneMgr.instance.isLoadComplete)
         {
             GameManager.instance.SetGameState(GameManager.state.MiniStart);
         }
@@ -68,7 +68,7 @@ public class ShredderController : MinigameController
             {
                 Debug.Log("Shredding End");
                 GameManager.instance.AddScore(score);
-                if (GameManager.instance.miniQueue.Count != 0)
+                if (GameManager.instance.miniQueue.Count != 0 && GameManager.instance.gameStatus != GameManager.state.MiniReady)
                     GameManager.instance.SetGameState(GameManager.state.MiniReady);
                 else
                     GameManager.instance.SetGameState(GameManager.state.Result);

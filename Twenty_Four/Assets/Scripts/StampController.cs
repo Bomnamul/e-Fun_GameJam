@@ -24,7 +24,7 @@ public class StampController : MinigameController
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady)
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.MiniReady && SceneMgr.instance.isLoadComplete)
         {
             GameManager.instance.SetGameState(GameManager.state.MiniStart);
             hand.GameStart();
@@ -39,7 +39,7 @@ public class StampController : MinigameController
             {
                 gameover = true;
                 GameManager.instance.AddScore(score);
-                if (GameManager.instance.miniQueue.Count != 0)
+                if (GameManager.instance.miniQueue.Count != 0 && GameManager.instance.gameStatus != GameManager.state.MiniReady)
                     GameManager.instance.SetGameState(GameManager.state.MiniReady);
                 else
                     GameManager.instance.SetGameState(GameManager.state.Result);
@@ -56,6 +56,7 @@ public class StampController : MinigameController
                 tempPaper = deskPos.GetChild(0);
                 tempPaper.parent = null;
                 tempPaper.DOMoveX(-5f, 0.5f).OnComplete(() => tempPaper.gameObject.SetActive(false));
+                tempPaper.DOScale(0.5f, 0.4f);
 
                 if (tempPaper.transform.name == "1StampPaper(Clone)" && stampCount == 1)
                 {
@@ -79,6 +80,7 @@ public class StampController : MinigameController
                 tempPaper = deskPos.GetChild(0);
                 tempPaper.parent = null;
                 tempPaper.DOMoveX(5f, 0.5f).OnComplete(() => tempPaper.gameObject.SetActive(false));
+                tempPaper.DOScale(0.5f, 0.4f);
 
                 if (tempPaper.transform.name == "2StampPaper(Clone)" && stampCount == 2)
                 {
