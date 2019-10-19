@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using UnityEngine.UI;
 
 public class StampController : MinigameController
 {
     public Transform deskPos;
     public Stamp_HandController hand;
+    public ParticleSystem stampFX;
 
     float remaintime = 50f;
     int stampCount;
@@ -34,6 +36,7 @@ public class StampController : MinigameController
         {
             remaintime -= Time.deltaTime;
             UIManager.instance.timerTxt.text = "Time : " + ((int)remaintime).ToString();
+            UIManager.instance.canvasList[4].GetComponent<GameCanvas>().gamePanel.transform.GetChild(1).GetComponent<Text>().text = hand.factory.unstampedList.Count.ToString();
 
             if (hand.factory.unstampedList.Count == 0 || remaintime <= 0)
             {
@@ -47,6 +50,7 @@ public class StampController : MinigameController
 
             if (Input.GetKeyDown(KeyCode.Space) && deskPos.childCount > 0 && !gameover)
             {
+                stampFX.Play();
                 anim.SetTrigger("OnStamp");
                 stampCount++;
             }
