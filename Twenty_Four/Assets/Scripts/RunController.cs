@@ -43,11 +43,6 @@ public class RunController : MonoBehaviour
         
     }
 
-    void Update()
-    {
-    
-    }
-
     private void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Space) && GameManager.instance.gameStatus == GameManager.state.Ready)
@@ -125,8 +120,8 @@ public class RunController : MonoBehaviour
         if (collision.transform.tag == "MinigamePoint")  // 부장과만나면 정지 후 mini 게임 전환
         {
             StartCoroutine(MinigamePoint());
-            //onRun = false;
-            //GameManager.instance.SetGameState(GameManager.state.Mini);
+            onRun = false;
+            GameManager.instance.SetGameState(GameManager.state.MiniReady);
         }
     }
 

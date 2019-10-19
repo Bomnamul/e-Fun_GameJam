@@ -75,6 +75,15 @@ public class PaperSortController : MonoBehaviour
                 StartCoroutine(OnPenalty());
             }
         }
+
+        if (factory.unsortedList.Count == 0)
+        {
+            GameManager.instance.AddScore(score);
+            if (GameManager.instance.miniQueue.Count != 0)
+                SceneMgr.instance.LoadScene(GameManager.instance.miniQueue.Dequeue());
+            else
+                GameManager.instance.SetGameState(GameManager.state.Result);
+        }
     }
 
     IEnumerator OnPenalty()

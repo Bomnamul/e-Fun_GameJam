@@ -6,8 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public enum state { Title, Ready, Run, Mini, Win, Lose }
+    public enum state { Title, Ready, Run, MiniReady, MiniStart, MiniEnd, Result, Win, Lose }
     public state gameStatus;
+    public Queue<int> miniQueue;
 
     List<int> scoreList;
 
@@ -20,16 +21,12 @@ public class GameManager : MonoBehaviour
         }
 
         scoreList = new List<int>();
+        miniQueue = new Queue<int>();
     }
 
     void Start()
     {
         SetGameState(state.Ready);
-    }
-
-    void Update()
-    {
-        
     }
 
     public void SetGameState(state state)
@@ -50,9 +47,21 @@ public class GameManager : MonoBehaviour
                 gameStatus = state.Run;
                 Debug.Log("State : Run");
                 break;
-            case state.Mini:
-                gameStatus = state.Mini;
-                Debug.Log("State : Mini");
+            case state.MiniReady:
+                gameStatus = state.MiniReady;
+                miniRoulette();
+                // UI로 랜덤 3개 보여줄 것
+                SceneMgr.instance.LoadScene(miniQueue.Dequeue(), 3);
+                Debug.Log("State : MiniReady");
+                break;
+            case state.MiniStart:
+                gameStatus = state.MiniStart;
+                Debug.Log("State : MiniStart");
+                break;
+            case state.Result:
+                gameStatus = state.Result;
+                SceneMgr.instance.LoadScene("Result");
+                Debug.Log("State : Result");
                 break;
             case state.Win:
                 gameStatus = state.Win;
@@ -75,5 +84,14 @@ public class GameManager : MonoBehaviour
     public void ClearScore()
     {
         scoreList.Clear();
+    }
+
+    void miniRoulette()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            int rnd = Random.Range(2, 4);
+            miniQueue.Enqueue(rnd);
+        }
     }
 }
