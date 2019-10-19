@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Result.unity
     guid: 0d45465bf483f3943b73c5b8f4dd3451
+  - enabled: 1
+    path: Assets/Scenes/Pokemon.unity
+    guid: ba75d1268555bd441b7e77933235242a
   m_configObjects: {}

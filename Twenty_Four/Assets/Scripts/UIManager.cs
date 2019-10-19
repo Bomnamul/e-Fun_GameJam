@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public Canvas healthCanvas;
     public Image healthRemain;
     public Text timerTxt;
+    public bool titleOn;
 
     private void Awake()
     {
@@ -39,7 +40,8 @@ public class UIManager : MonoBehaviour
     {
         foreach (var canvas in canvasList)
         {
-            canvas.SetActive(false);
+            if (canvas.tag != "Title")
+                canvas.SetActive(false);
         }
 
         switch (state) // 스테이트마다 따로 ui로 보여줘야 할 것들 수정해야 함
@@ -51,7 +53,6 @@ public class UIManager : MonoBehaviour
                 SetUIHealthbar(false);
                 canvasList[1].SetActive(true);
                 canvasList[1].GetComponent<GameCanvas>().SetReadyPanel(true);
-                canvasList[0].SetActive(false);
                 break;
             case GameManager.state.Run:
                 SetUIHealthbar(true);
@@ -76,7 +77,10 @@ public class UIManager : MonoBehaviour
     public void SetMiniUICanvas(GameManager.state state, int index)
     {
         foreach (var canvas in canvasList)
-            canvas.SetActive(false);
+        {
+            if (canvas.tag != "Title")
+                canvas.SetActive(false);
+        }
 
         switch (state)
         {

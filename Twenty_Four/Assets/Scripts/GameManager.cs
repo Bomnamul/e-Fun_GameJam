@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,8 +44,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log("State : Title");
                 break;
             case state.Ready:
-                gameStatus = state.Ready;                
-                //UIManager.instance.SetUICanvas(gameStatus);
+                gameStatus = state.Ready;
+                UIManager.instance.SetUICanvas(gameStatus);
                 Debug.Log("State : Ready");
                 break;
             case state.Run:
@@ -110,6 +111,12 @@ public class GameManager : MonoBehaviour
         UIManager.instance.SetUIHealthRemain(playerHP);
     }
 
+    internal void GetHeal(int amount)
+    {
+        playerHP += amount;
+        UIManager.instance.SetUIHealthRemain(playerHP);
+    }
+
     public void AddScore(int score)
     {
         scoreList.Add(score);
@@ -135,7 +142,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            int rnd = Random.Range(2, 5);
+            int rnd = UnityEngine.Random.Range(2, 5);
             if(miniQueue.Contains(rnd))
             {
                 i--;

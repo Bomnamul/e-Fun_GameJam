@@ -64,8 +64,12 @@ public class SceneMgr : MonoBehaviour
         fade.DOFade(1f, 1f);
         yield return new WaitForSeconds(1f);
         while (ao.progress < 0.9f)
-            yield return null;
+            yield return null;        
         fade.DOFade(0f, 1f).OnComplete(() => { fade.gameObject.SetActive(false); });
+        if (UIManager.instance.titleOn)
+        {
+            UIManager.instance.canvasList[0].SetActive(false);
+        }
         ao.allowSceneActivation = true;
 
         isLoadComplete = true;
