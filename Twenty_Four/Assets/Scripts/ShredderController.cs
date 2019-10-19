@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class ShredderController : MinigameController
 {
     public ShredderMachine shredder;
+    public ParticleSystem shredFX;
+    public float remainTime = 30;
 
     Animator anim;
     List<UselessPaper> currentPaper;
@@ -30,6 +32,9 @@ public class ShredderController : MinigameController
 
         if (GameManager.instance.gameStatus == GameManager.state.MiniStart)
         {
+            remainTime -= Time.deltaTime;
+            UIManager.instance.timerTxt.text = "Time : " + ((int)remainTime).ToString();
+
             if (Input.GetKeyDown(KeyCode.Space) && currentPaper.Count == 0)
             {
                 anim.SetBool("OnShred", true);
@@ -39,6 +44,8 @@ public class ShredderController : MinigameController
             }
             else if (Input.GetKeyDown(KeyCode.Space) && currentPaper.Count != 0)
             {
+                GameManager.instance.GetDamage(10);
+                anim.SetTrigger("OnHurt");
                 Debug.Log("Freezing");
                 score -= 10;
                 // Freezing
@@ -46,14 +53,25 @@ public class ShredderController : MinigameController
 
             if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) && currentPaper.Count != 0)
             {
+                shredFX.Play();
                 currentPaper[0].count--;
                 impulse.GenerateImpulse();
                 UIManager.instance.canvasList[2].GetComponent<GameCanvas>().gamePanel.GetComponentInChildren<Text>().text = currentPaper[0].count.ToString();
             }
             else if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)) && currentPaper.Count == 0)
             {
+                GameManager.instance.GetDamage(10);
+                anim.SetTrigger("OnHurt");
                 Debug.Log("Freezing");
                 score -= 10;
+            }
+
+            if (remainTime <= 0)
+            {
+                if (GameManager.instance.miniQueue.Count != 0 && GameManager.instance.gameStatus != GameManager.state.MiniReady)
+                    GameManager.instance.SetGameState(GameManager.state.MiniReady);
+                else
+                    GameManager.instance.SetGameState(GameManager.state.Result);
             }
 
             if (currentPaper.Count != 0 && currentPaper[0].count == 0)

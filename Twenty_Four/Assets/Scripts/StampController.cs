@@ -103,6 +103,7 @@ public class StampController : MinigameController
     IEnumerator Miss()
     {
         print("Miss");
+        GameManager.instance.GetDamage(10);
         if (anim.GetBool("OnMiss"))
         {
             yield return null;
