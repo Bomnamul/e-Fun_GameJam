@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
 
     public List<GameObject> canvasList;
+    public Canvas healthCanvas;
     public Image healthRemain;
     public Text timerTxt;
 
@@ -26,6 +27,14 @@ public class UIManager : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (healthCanvas.gameObject.activeSelf)
+        {
+            SetUIScore();
+        }
+    }
+
     public void SetUICanvas(GameManager.state state)
     {
         foreach (var canvas in canvasList)
@@ -39,10 +48,12 @@ public class UIManager : MonoBehaviour
                 canvasList[0].SetActive(true);
                 break;
             case GameManager.state.Ready:
+                SetUIHealthbar(false);
                 canvasList[1].SetActive(true);
                 canvasList[1].GetComponent<GameCanvas>().SetReadyPanel(true);
                 break;
             case GameManager.state.Run:
+                SetUIHealthbar(true);
                 canvasList[1].SetActive(true);
                 canvasList[1].GetComponent<GameCanvas>().SetReadyPanel(false);
                 break;
@@ -69,6 +80,7 @@ public class UIManager : MonoBehaviour
         switch (state)
         {
             case GameManager.state.MiniReady:
+                SetUIHealthbar(false);
                 switch (index)
                 {
                     case 2:
@@ -88,6 +100,7 @@ public class UIManager : MonoBehaviour
                 }
                 break;
             case GameManager.state.MiniStart:
+                SetUIHealthbar(true);
                 switch (index)
                 {
                     case 2:
@@ -113,8 +126,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void SetUIHealthbar(bool condition)
+    {
+        healthCanvas.gameObject.SetActive(condition);
+    }
+
     public void SetUIHealthRemain(float remain)
     {
         healthRemain.fillAmount = remain / 100;
+    }
+
+    public void SetUIScore()
+    {
+        healthCanvas.GetComponentInChildren<Text>().text = "업무 평가\n" + GameManager.instance.TotalScore();
     }
 }
