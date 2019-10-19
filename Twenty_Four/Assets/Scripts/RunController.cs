@@ -60,6 +60,8 @@ public class RunController : MonoBehaviour
 
         }
 
+        UIManager.instance.scoreTxt.text = "업무 평가" + "\n" + score.ToString();
+
     }
 
     private void GetDamage(int damage)
