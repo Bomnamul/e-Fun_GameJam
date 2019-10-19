@@ -51,6 +51,7 @@ public class UIManager : MonoBehaviour
                 SetUIHealthbar(false);
                 canvasList[1].SetActive(true);
                 canvasList[1].GetComponent<GameCanvas>().SetReadyPanel(true);
+                canvasList[0].SetActive(false);
                 break;
             case GameManager.state.Run:
                 SetUIHealthbar(true);

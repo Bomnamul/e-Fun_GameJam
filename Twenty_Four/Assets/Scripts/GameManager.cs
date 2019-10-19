@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        SetGameState(state.Ready);
+        //SetGameState(state.Title);
     }
 
     public void SetGameState(state state)
@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log("State : Title");
                 break;
             case state.Ready:
-                gameStatus = state.Ready;
-                UIManager.instance.SetUICanvas(gameStatus);
+                gameStatus = state.Ready;                
+                //UIManager.instance.SetUICanvas(gameStatus);
                 Debug.Log("State : Ready");
                 break;
             case state.Run:
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
                 miniIndex = miniQueue.Dequeue();
                 print("Dequeue");
                 // UI로 랜덤 3개 보여줄 것
-                SceneMgr.instance.LoadScene(miniIndex, 2);
+                SceneMgr.instance.LoadScene(miniIndex);
                 //UIManager.instance.SetMiniUICanvas(gameStatus, miniIndex);
                 Debug.Log("State : MiniReady");
                 break;
