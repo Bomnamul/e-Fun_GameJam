@@ -70,11 +70,9 @@ public class SceneMgr : MonoBehaviour
         {
             UIManager.instance.canvasList[0].SetActive(false);
         }
-        ao.allowSceneActivation = true;
 
         isLoadComplete = true;
         UIManager.instance.SetMiniUICanvas(GameManager.instance.gameStatus, GameManager.instance.miniIndex);
-        UIManager.instance.SetUICanvas(GameManager.instance.gameStatus);
     }
 
     IEnumerator AsyncLoadScene(int sceneIndex, int delay)
