@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
                 miniIndex = miniQueue.Dequeue();
                 print("Dequeue");
                 // UI로 랜덤 3개 보여줄 것
-                SceneMgr.instance.LoadScene(miniIndex, 2);
+                SceneMgr.instance.LoadScene(miniIndex);
                 //UIManager.instance.SetMiniUICanvas(gameStatus, miniIndex);
                 Debug.Log("State : MiniReady");
                 break;
