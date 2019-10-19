@@ -63,6 +63,7 @@ public class PaperSortController : MonoBehaviour
                 StartCoroutine(OnPenalty());
             }
         }
+        
         if (Input.GetKeyDown(KeyCode.RightArrow) && !penalty && !gameover)
         {
             var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
@@ -80,6 +81,15 @@ public class PaperSortController : MonoBehaviour
                 tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                 StartCoroutine(OnPenalty());
             }
+        }
+        
+        if (factory.unsortedList.Count == 0)
+        {
+            GameManager.instance.AddScore(score);
+            if (GameManager.instance.miniQueue.Count != 0)
+                SceneMgr.instance.LoadScene(GameManager.instance.miniQueue.Dequeue());
+            else
+                GameManager.instance.SetGameState(GameManager.state.Result);
         }
     }
 

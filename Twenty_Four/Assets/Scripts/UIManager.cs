@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour
             case GameManager.state.Run:
                 canvasList[1].SetActive(true);
                 break;
-            case GameManager.state.Mini:
+            case GameManager.state.MiniReady:
                 canvasList[2].SetActive(true);
                 break;
             case GameManager.state.Win:
