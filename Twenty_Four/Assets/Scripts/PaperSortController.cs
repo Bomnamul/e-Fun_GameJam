@@ -11,17 +11,23 @@ public class PaperSortController : MonoBehaviour
     public Transform greenPoint;
     public Transform bluePoint;
 
+    float remaintime = 30;
     int score = 0;
     bool penalty = false;
-
-    void Start()
-    {
-        
-    }
+    bool gameover = false;
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.LeftArrow) && !penalty)
+        remaintime -= Time.deltaTime;
+        print((int)remaintime);
+
+        if(factory.unsortedList.Count == 0 || remaintime <= 0)
+        {
+            gameover = true;
+            GameManager.instance.AddScore(score);
+        }
+
+        if(Input.GetKeyDown(KeyCode.LeftArrow) && !penalty && !gameover)
         {
             var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
             
@@ -35,11 +41,11 @@ public class PaperSortController : MonoBehaviour
             }
             else
             {
-                tempPaper.transform.DOShakePosition(0.5f);
+                tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                 StartCoroutine(OnPenalty());
             }
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow) && !penalty)
+        if (Input.GetKeyDown(KeyCode.DownArrow) && !penalty && !gameover)
         {
             var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
 
@@ -53,11 +59,11 @@ public class PaperSortController : MonoBehaviour
             }
             else
             {
-                tempPaper.transform.DOShakePosition(0.5f);
+                tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                 StartCoroutine(OnPenalty());
             }
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow) && !penalty)
+        if (Input.GetKeyDown(KeyCode.RightArrow) && !penalty && !gameover)
         {
             var tempPaper = factory.unsortedList[factory.unsortedList.Count - 1];
 
@@ -71,7 +77,7 @@ public class PaperSortController : MonoBehaviour
             }
             else
             {
-                tempPaper.transform.DOShakePosition(0.5f);
+                tempPaper.transform.DOShakePosition(duration: 0.5f, strength: 0.3f);
                 StartCoroutine(OnPenalty());
             }
         }
