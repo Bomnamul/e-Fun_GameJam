@@ -1984,8 +1984,9 @@ MonoBehaviour:
   - {fileID: 596880571}
   healthCanvas: {fileID: 479682126}
   healthRemain: {fileID: 1703244365}
-  timerTxt: {fileID: 0}
+  timerTxt: {fileID: 761458831}
   titleOn: 0
+  scoreTxt: {fileID: 761458831}
 --- !u!4 &1133488751
 Transform:
   m_ObjectHideFlags: 0
@@ -4171,6 +4172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1e94c7cc0e6e8041863d58195898ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Title: {fileID: 1685446791}
 --- !u!4 &1912326227
 Transform:
   m_ObjectHideFlags: 0
