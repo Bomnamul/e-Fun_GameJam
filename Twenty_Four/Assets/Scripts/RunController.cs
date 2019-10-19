@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Cinemachine;
 using System;
+using Assets.Pixelation.Scripts;
 
 public class RunController : MonoBehaviour
 {
@@ -112,7 +113,6 @@ public class RunController : MonoBehaviour
 
         if (collision.transform.tag == "CompanyPoint") // 회사에 도착 할 경우 impulse 생성, 파티클 생성
         {           
-            StartCoroutine(OpenKick());
             smokefx.gameObject.SetActive(false);
         }
 
@@ -144,6 +144,11 @@ public class RunController : MonoBehaviour
         onRun = false;
         speed = 0f;
         anim.SetBool("OnWalk", false);
+        while(Camera.main.GetComponent<Pixelation>().BlockCount > 64)
+        {
+            Camera.main.GetComponent<Pixelation>().BlockCount -= 5;
+            yield return null;
+        }
         GameManager.instance.SetGameState(GameManager.state.MiniReady);
     }
 
@@ -172,8 +177,6 @@ public class RunController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         onRun = true;
         anim.SetBool("OnRun", true);
-        
-
     }
 
 }
