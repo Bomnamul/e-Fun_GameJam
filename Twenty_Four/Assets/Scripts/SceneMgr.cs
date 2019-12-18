@@ -74,6 +74,11 @@ public class SceneMgr : MonoBehaviour
 
         isLoadComplete = true;
 
+        if (sceneIndex == 0)
+        {
+            GameManager.instance.SetGameState(GameManager.state.Title);
+        }
+
         if (GameManager.instance.gameStatus == GameManager.state.MiniReady)
             UIManager.instance.SetMiniUICanvas(GameManager.instance.gameStatus, GameManager.instance.miniIndex);
         else

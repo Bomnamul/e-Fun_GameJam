@@ -42,10 +42,12 @@ public class GameManager : MonoBehaviour
             case state.Title:
                 gameStatus = state.Title;
                 Debug.Log("State : Title");
+                playerHP = 100;
                 break;
             case state.Ready:
                 gameStatus = state.Ready;
                 UIManager.instance.SetUICanvas(gameStatus);
+                UIManager.instance.SetUIHealthRemain(playerHP);
                 Debug.Log("State : Ready");
                 break;
             case state.Run:
